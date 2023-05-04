@@ -9,7 +9,7 @@ class MarsSerial:
 
 	def send(self, data):
 		"""Sends the data as-is over Serial"""
-		pass
+		self.device.write(data)
 
 	def get_data(self): 
 		"""Returns a MarsData received over Serial"""
@@ -19,4 +19,4 @@ class MarsSerial:
 
 	def close(self): 
 		"""Closes the Serial port to be used again later"""
-		pass
+		self.device.close()
