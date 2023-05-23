@@ -1,4 +1,4 @@
-from network import ProtoSocket, VideoClient
+from network import ProtoSocket
 from network.generated import Device
 
 class MarsServer(ProtoSocket): 
