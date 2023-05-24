@@ -13,6 +13,7 @@ class MarsSerial:
 
 	def get_data(self): 
 		"""Returns a MarsData received over Serial"""
+		if not self.device.in_waiting: return None
 		serial_bytes = self.device.read(size=self.device.in_waiting)
 		if not serial_bytes: return None
 		return MarsData.FromString(serial_bytes)
