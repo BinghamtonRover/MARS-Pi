@@ -9,7 +9,7 @@ class MarsServer(ProtoSocket):
 	# Overriden from ProtoSocket
 	def on_message(self, wrapper): 
 		if wrapper.name != "MarsCommand": print("Got an unknown message")
-		else: self.mars.send(wrapper.data)
+		else: self.mars.serial.send(wrapper.data)
 
 	# Overriden from ProtoSocket
 	def on_loop(self): 
