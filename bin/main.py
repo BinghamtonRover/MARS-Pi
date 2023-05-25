@@ -2,7 +2,8 @@ from network import *
 from lib.server import MarsServer
 from lib.serial import MarsSerial
 
-SERIAL_PORT = "/dev/ttyACM0"
+SERIAL_PORT = "COM32"
+# SERIAL_PORT = "/dev/ttyACM0"
 
 class Mars:
 	def __init__(self): 
@@ -15,5 +16,9 @@ class Mars:
 
 if __name__ == "__main__": 
 	mars = Mars()
+	print("Initializing MARS Server")
+	# try: mars.serial.connect()
+	# except KeyboardInterrupt: pass
+	# mars.close()
 	thread = ServerThread(mars.server)
 	ServerThread.startThreads([thread])
