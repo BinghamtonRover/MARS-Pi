@@ -4,9 +4,9 @@ import warnings
 import threading
 
 from network import *
-from network.generated import MarsData
+from network.generated import *
 
-class MarsSerial(): 
+class MarsSerial: 
 	def __init__(self, mars, port): 
 		# Do not initialize with the port. Otherwise it will open and throw immediately
 		self.device = serial.Serial(None, 9600, timeout=1)
@@ -17,6 +17,7 @@ class MarsSerial():
 
 	def send(self, data):
 		"""Sends the data as-is over Serial"""
+		if not self.is_connected: return
 		self.device.write(data)
 
 	def get_data(self): 
@@ -71,17 +72,21 @@ class MarsSerial():
 			else: 
 				print(f"\nFailed handshake: {Device.Name(response.sender)} => {Device.Name(response.receiver)}")
 				time.sleep(0.5)
+				self.mars.server.status = MarsStatus.FAILED_HANDSHAKE
 				self.send_disconnect()
 		print(" Done!", flush=True)
 
 	def connect(self): 
 		print("Connecting to the Mars subsystem...")
+		self.mars.server.status = MarsStatus.PORT_NOT_FOUND
 		while not self.is_connected: 
 			try: 
 				self.device.close()
 				self.await_open_port()
+				self.mars.server.status = MarsStatus.TEENSY_UNRESPONSIVE
 				self.send_disconnect()
 				self.await_handshake()
+				self.mars.server.status = MarsStatus.TEENSY_CONNECTED
 				self.is_connected = True
 			except serial.SerialException as error:
 				if str(error).startswith("WriteFile failed"): 
